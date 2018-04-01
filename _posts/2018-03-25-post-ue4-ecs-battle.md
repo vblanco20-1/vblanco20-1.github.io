@@ -27,52 +27,53 @@ The interesting part of it, is that it can be optimized, REALLY optimized. The c
 In general, entities are just a bag of components, and then in the systems you iterate through all the entities in the game that have certain sets of components to execute something.
 
 Example of a very basic "debug draw" system. This system will execute itself once every second, and draw all the entities that have a Position and a DebugSphere component.
-    ```c++
-    struct DebugDrawSystem :public System {
-    
-        const float UpdateRate = 1;
-    
-        float elapsed = 0;
-    
-        void update(ECS_Registry &registry, float dt) override
-        {
-            assert(OwnerActor);
-            elapsed -= dt;
-            if (elapsed > 0)
-            {
-                return;
-            }
-    else
+```cpp
+struct DebugDrawSystem :public System {
+
+    const float UpdateRate = 1;
+
+    float elapsed = 0;
+
+    void update(ECS_Registry &registry, float dt) override
     {
-     elapsed = UpdateRate;
-    
-    //iterate through every entity with both a Debug Sphere and Position component
-            registry.view<FDebugSphere, FPosition>().each([&,dt](auto entity, FDebugSphere & ds, FPosition & pos) {
-    
-                DrawDebugSphere(OwnerActor->GetWorld(),pos.pos,ds.radius,12,ds.color,true,UpdateRate);
-            });
+        assert(OwnerActor);
+        elapsed -= dt;
+        if (elapsed > 0)
+        {
+            return;
         }
+else
+{
+    elapsed = UpdateRate;
+
+//iterate through every entity with both a Debug Sphere and Position component
+        registry.view<FDebugSphere, FPosition>().each([&,dt](auto entity, FDebugSphere & ds, FPosition & pos) {
+
+            DrawDebugSphere(OwnerActor->GetWorld(),pos.pos,ds.radius,12,ds.color,true,UpdateRate);
+        });
     }
-    
-    
-    };
-    ```
+}
+
+
+};
+```
 
 This are the Components that are used in that system:
 
-    ```c++
-    struct FDebugSphere {    
-    
-        float radius;
-    
-        FColor color;
-    };
-    
-    struct FPosition {  
-    
-       FVector pos;
-    };
-    ```
+```cpp
+
+struct FDebugSphere {    
+
+    float radius;
+
+    FColor color;
+};
+
+struct FPosition {  
+
+    FVector pos;
+};
+```
     
 
 Thats all it is. The Debug Draw system just asks the ECS Registry for all the entities with Debug Draw and Position, and draws them.
@@ -81,15 +82,18 @@ Thats all it is. The Debug Draw system just asks the ECS Registry for all the en
 In something like this, "Ticking" entities and their components is so fast its pretty much literally free. Im updating 2500 bullets per frame there, all of them do collision raycasts and each of them finds all spaceships in a radius, and targets them. All of that takes less than 2 miliseconds. It takes more time to update the instanced mesh render component (the ue4 one) than to calculate all the logic for all the bullets.
 
 
-[IMG2=JSON]{"data-align":"none","data-size":"full","src":"https:\/\/i.imgur.com\/U9fTFIZ.png"}[/IMG2]
+<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/U9fTFIZ"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 The projectiles and explosions are 100% "pure ECS", and thats why i can spawn and destroy so many without a hitch. They arent seen by unreal engine, they arent an Uobject, and they do not use dynamic memory. They are stored inside the ECS library in contiguous arrays. They are created from an Archetype blueprint. The Archetype is just an AInfo with a lot of "ECS wrapper" components. When i want to spawn a new bullet, i check if there is an archetype for that class, and spawn one. Then from that archetype i spawned i just copy new bullets (or explosions) over and over again. Given that pure ECS entities are just a ID and a bunch of very small components stored in some array somwhere, spawning and destroying bullets is super fast. There is no need to pool anything here.
 
-[IMG2=JSON]{"data-align":"none","data-size":"full","src":"https:\/\/i.imgur.com\/Kl074xA.png"}[/IMG2]
+<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/Kl074xA"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+
+
 The spaceships, on the other hand, are hybrid Actor-ECS. They are actual actors with blueprints, and they have collision. For them, i have created a normal ActorComponent that "links" the normal UE4 actor with its ECS representation. The whole spaceship logic is done on the ECS world, and the Actor blueprint does not have ticking enabled. When a frame starts, the ECS system copies the transform of the Actor into a component, does all the logic, and then copies the transform back into normal unreal engine Actor (using SetActorTransform). This spaceship actors have an "OnKilled" event (wich gets called from the ECS) wich respawns the spaceship.
 
-**Performance
-[IMG2=JSON]{"data-align":"none","data-size":"full","src":"https:\/\/i.imgur.com\/o8fr811.png"}[/IMG2]**
+**Performance**
+
+<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/o8fr811"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 This whole simulation takes less than 9ms to update on the CPU per frame when used in the editor. If its on a "Release" build of the game, it takes 5 milliseconds.
 
@@ -97,9 +101,11 @@ The performance of this is quite impressive, but right now, most of the cpu time
 
 
 
+<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/klhF1m6"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
-[IMG2=JSON]{"data-align":"none","data-size":"full","src":"https:\/\/i.imgur.com\/klhF1m6.png"}[/IMG2]
 **Boid Simulation**
+
+
 The 3rd most costly thing in this project is the behavior for the bullets and the spaceships. The spaceships all have crowd separation, and the bullets have a range and move towards any enemy (other faction) that comes near. For this, i made an acceleration structure based on an sparse tile map. Essentially i have a TMap for TileLocation and TileData, and when the game updates, every entity that has a "GridMap" component gets sent into the data structure. One would think creating this data structure takes time, but it doesnt. I add the 400 spaceships into this structure every frame, and it takes 0.01 miliseconds.
 
 When i need to "find all entities within X units" of another entity (for the homing bullets and avoidance on the spaceships), i just query the tile map for the nearby tiles and the objects inside them. This decreases the number of candidate entities a lot. Given the incredibly huge amount of entites that need to be checked, this took 7 miliseconds to update on my first implementation. If it didnt use the tile system, it would take a ridiculous amount of time.
@@ -110,53 +116,55 @@ One of the most interesting things about ECS architecture, is that all the Syste
 
 Luckly, UE4 also has a job system, and there are a few interesting things on it. As most of the Systems are doing logic in their own world, separate from unreal, they are very good candidates to parallelize. For the homing behavior on the bullets, and for the separation behavior on the spaceships, i just used ParallelFor to execute it. First i "asked" the ECS library for all the entities with the components i wanted (Spaceship,Position,Velocity) for example. And then stored all of them into an array. Then i just execute the parallel for in that array. The tile map is read-only so its safe to read from multiple threads. Multithreading the boid simulation improved the calculation from 7 millseconds into less than 2. (Ryzen).
 
-```c++
+```cpp
+
+{
+    SCOPE_CYCLE_COUNTER(STAT_Boids);
+    //ask the ECS registry for how many spaceships there are
+    int nShips = registry.raw<FSpaceship>().size();
+
+    SpaceshipArray.Reset(nShips);
+        //iterate through all spaceships with some components, and store them in an array
+    registry.view<FSpaceship, FPosition, FVelocity, FFaction>().each([&, dt](auto entity, FSpaceship & proj, FPosition & pos, FVelocity & vel, FFaction & faction) {
+
+        SpaceshipData Projectile;
+        Projectile.faction = &faction;
+        Projectile.pos = &pos;
+        Projectile.vel = &vel;
+        Projectile.ship = &proj;
+        SpaceshipArray.Add(Projectile);
+    });
+    //Update the movmenet for each spaceship in parallel
+    ParallelFor(SpaceshipArray.Num(), [&](int32 Index)
+    {
+        SpaceshipData data = SpaceshipArray[Index];
+        const float shipCheckRadius = 1000;
+        //grab nearby entities from the gridmap
+        Foreach_EntitiesInRadius(shipCheckRadius, data.pos->pos, [&](GridItem item) {
+
+            if (item.Faction == data.faction->faction)
             {
-                SCOPE_CYCLE_COUNTER(STAT_Boids);
-                //ask the ECS registry for how many spaceships there are
-                int nShips = registry.raw<FSpaceship>().size();
-    
-                SpaceshipArray.Reset(nShips);
-                 //iterate through all spaceships with some components, and store them in an array
-                registry.view<FSpaceship, FPosition, FVelocity, FFaction>().each([&, dt](auto entity, FSpaceship & proj, FPosition & pos, FVelocity & vel, FFaction & faction) {
-    
-                    SpaceshipData Projectile;
-                    Projectile.faction = &faction;
-                    Projectile.pos = &pos;
-                    Projectile.vel = &vel;
-                    Projectile.ship = &proj;
-                    SpaceshipArray.Add(Projectile);
-                });
-                //Update the movmenet for each spaceship in parallel
-                ParallelFor(SpaceshipArray.Num(), [&](int32 Index)
-                {
-                    SpaceshipData data = SpaceshipArray[Index];
-                    const float shipCheckRadius = 1000;
-                    //grab nearby entities from the gridmap
-                    Foreach_EntitiesInRadius(shipCheckRadius, data.pos->pos, [&](GridItem item) {
-    
-                        if (item.Faction == data.faction->faction)
-                        {
-                            const FVector TestPosition = item.Position;
-    
-                            const float DistSquared = FVector::DistSquared(TestPosition, data.pos->pos);
-    
-                            const float AvoidanceDistance = shipCheckRadius * shipCheckRadius;
-                            const float DistStrenght = FMath::Clamp(1.0 - (DistSquared / (AvoidanceDistance)), 0.1, 1.0) * dt;
-                            const FVector AvoidanceDirection = data.pos->pos - TestPosition;
-    
-                            data.vel->Add(AvoidanceDirection.GetSafeNormal() * data.ship->AvoidanceStrenght*DistStrenght);
-                        }
-                    });
-    
-                    //finish the speed and clamp it to max velocity.
-                    FVector ToTarget = data.ship->TargetMoveLocation - data.pos->pos;
-                    ToTarget.Normalize();
-    
-                    data.vel->Add(ToTarget * 500 * dt);
-                    data.vel->vel = data.vel->vel.GetClampedToMaxSize(data.ship->MaxVelocity);
-                });
+                const FVector TestPosition = item.Position;
+
+                const float DistSquared = FVector::DistSquared(TestPosition, data.pos->pos);
+
+                const float AvoidanceDistance = shipCheckRadius * shipCheckRadius;
+                const float DistStrenght = FMath::Clamp(1.0 - (DistSquared / (AvoidanceDistance)), 0.1, 1.0) * dt;
+                const FVector AvoidanceDirection = data.pos->pos - TestPosition;
+
+                data.vel->Add(AvoidanceDirection.GetSafeNormal() * data.ship->AvoidanceStrenght*DistStrenght);
             }
+        });
+
+        //finish the speed and clamp it to max velocity.
+        FVector ToTarget = data.ship->TargetMoveLocation - data.pos->pos;
+        ToTarget.Normalize();
+
+        data.vel->Add(ToTarget * 500 * dt);
+        data.vel->vel = data.vel->vel.GetClampedToMaxSize(data.ship->MaxVelocity);
+    });
+}
+
 ```
     
     
