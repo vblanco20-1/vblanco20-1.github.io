@@ -5,7 +5,7 @@ highlighter:      rouge
 # Setup
 title:            Vblanco's Programming Blog
 tagline:          'Writing about programming and games'
-description:      'The <a href="http://hyde.getpoole.com" target="_blank">Hyde</a> theme for <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, refreshed.'
+description:      'Writing about programming and games.'
 url:              https://vblanco20-1.github.io/
 baseurl:          # the optional subpath of your site, e.g. "/blog"
                   # NB: This applies to all pages in your Jekyll site.

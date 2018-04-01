@@ -3,15 +3,15 @@ layout: post
 title: "Code: Experimenting with ECS in UE4"
 excerpt_separator: "<!--more-->"
 categories:
-  - Post Formats
+  - Code Experiment
 tags:
   - Post Formats
   - readability
   - standard
 ---
-[video=youtube;s8546qGL8ZA]https://www.youtube.com/watch?v=s8546qGL8ZA[/video]
+<iframe width="560" height="315" src="https://www.youtube.com/embed/s8546qGL8ZA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-[https://gfycat.com/EdibleCourteousHorse]("http://gfycat.com/EdibleCourteousHorse")
+<iframe src='https://gfycat.com/ifr/EdibleCourteousHorse' frameborder='0' scrolling='no' allowfullscreen width='640' height='328'></iframe>
 
 Inspired by the new Unity ECS system, i decided to try those same techniques with UE4 and C++ instead of Unity and C# . For my experiment, i used the library EnTT ([URL]https://github.com/skypjack/entt[/URL]) to drive the ECS.
 
@@ -27,7 +27,7 @@ The interesting part of it, is that it can be optimized, REALLY optimized. The c
 In general, entities are just a bag of components, and then in the systems you iterate through all the entities in the game that have certain sets of components to execute something.
 
 Example of a very basic "debug draw" system. This system will execute itself once every second, and draw all the entities that have a Position and a DebugSphere component.
-    
+    ```c++
     struct DebugDrawSystem :public System {
     
         const float UpdateRate = 1;
@@ -56,11 +56,11 @@ Example of a very basic "debug draw" system. This system will execute itself onc
     
     
     };
-    
+    ```
 
 This are the Components that are used in that system:
 
-    
+    ```c++
     struct FDebugSphere {    
     
         float radius;
@@ -72,7 +72,7 @@ This are the Components that are used in that system:
     
        FVector pos;
     };
-    
+    ```
     
 
 Thats all it is. The Debug Draw system just asks the ECS Registry for all the entities with Debug Draw and Position, and draws them.
@@ -110,7 +110,7 @@ One of the most interesting things about ECS architecture, is that all the Syste
 
 Luckly, UE4 also has a job system, and there are a few interesting things on it. As most of the Systems are doing logic in their own world, separate from unreal, they are very good candidates to parallelize. For the homing behavior on the bullets, and for the separation behavior on the spaceships, i just used ParallelFor to execute it. First i "asked" the ECS library for all the entities with the components i wanted (Spaceship,Position,Velocity) for example. And then stored all of them into an array. Then i just execute the parallel for in that array. The tile map is read-only so its safe to read from multiple threads. Multithreading the boid simulation improved the calculation from 7 millseconds into less than 2. (Ryzen).
 
-    
+```c++
             {
                 SCOPE_CYCLE_COUNTER(STAT_Boids);
                 //ask the ECS registry for how many spaceships there are
@@ -157,7 +157,7 @@ Luckly, UE4 also has a job system, and there are a few interesting things on it.
                     data.vel->vel = data.vel->vel.GetClampedToMaxSize(data.ship->MaxVelocity);
                 });
             }
-    
+```
     
     
 
@@ -175,6 +175,3 @@ Another issue is the fact that this is a C++ thing. While you can interface even
 Last, this is a pure C++ system, so it does not support replication. Luckily, this is also extremelly easy to write networked code for if needed.
 
 Still, my new project is another VR game, where i need the absolute highest performance, and i think i can do the engine tweaks for "mass updating" myself, decreasing the cost of Hybrid actors by a lot, so im going to use this systems for the new game.
-
-
-Im going to release this demo once i improve its messy code into github. If you have any questions, feel free to ask.
