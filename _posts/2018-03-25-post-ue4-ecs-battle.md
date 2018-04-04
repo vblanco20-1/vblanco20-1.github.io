@@ -7,11 +7,12 @@ thumbnail: "assets/img/screenshots/spacebattle.jpg"
 categories:
   - Code Experiment
 tags:
-  - Post Formats
-  - readability
-  - standard
+  - UE4
+  - Code
+  - ECS
+  - Experiment
 ---
-<iframe width="560" height="315" src="https://www.youtube.com/embed/s8546qGL8ZA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+[Video](https://www.youtube.com/watch?v=s8546qGL8ZA)
 
 <iframe src='https://gfycat.com/ifr/EdibleCourteousHorse' frameborder='0' scrolling='no' allowfullscreen width='640' height='328'></iframe>
 
@@ -35,13 +36,11 @@ In general, entities are just a bag of components, and then in the systems you i
 
 Example of a very basic "debug draw" system. This system will execute itself once every second, and draw all the entities that have a Position and a DebugSphere component.
 
-<script src="https://gist.github.com/vblanco20-1/940a57a1e4314de326eb120e3c5986ec.js"></script>
 
 ```cpp
 struct DebugDrawSystem :public System {
 
     const float UpdateRate = 1;
-
     float elapsed = 0;
 
     void update(ECS_Registry &registry, float dt) override
@@ -52,32 +51,28 @@ struct DebugDrawSystem :public System {
         {
             return;
         }
-else
-{
-    elapsed = UpdateRate;
+        else
+        {
+            elapsed = UpdateRate;
 
-//iterate through every entity with both a Debug Sphere and Position component
-        registry.view<FDebugSphere, FPosition>().each([&,dt](auto entity, FDebugSphere & ds, FPosition & pos) {
+            //iterate through every entity with both a Debug Sphere and Position component
+            registry.view<FDebugSphere, FPosition>().each([&,dt](auto entity, FDebugSphere & ds, FPosition & pos) {
 
-            DrawDebugSphere(OwnerActor->GetWorld(),pos.pos,ds.radius,12,ds.color,true,UpdateRate);
-        });
+                DrawDebugSphere(OwnerActor->GetWorld(),pos.pos,ds.radius,12,ds.color,true,UpdateRate);
+            });
+        }
     }
-}
-
-
 };
 ```
 
 This are the Components that are used in that system:
 
-<script src="https://gist.github.com/vblanco20-1/a37e57ea401fa3f69737bbd527dc2059.js"></script>
+
 
 ```cpp
-
 struct FDebugSphere {    
 
     float radius;
-
     FColor color;
 };
 
@@ -139,12 +134,9 @@ One of the most interesting things about ECS architecture, is that all the Syste
 Luckly, UE4 also has a job system, and there are a few interesting things on it. As most of the Systems are doing logic in their own world, separate from unreal, they are very good candidates to parallelize. For the homing behavior on the bullets, and for the separation behavior on the spaceships, i just used ParallelFor to execute it. First i "asked" the ECS library for all the entities with the components i wanted (Spaceship,Position,Velocity) for example. And then stored all of them into an array. Then i just execute the parallel for in that array. The tile map is read-only so its safe to read from multiple threads. Multithreading the boid simulation improved the calculation from 7 millseconds into less than 2. (Ryzen).
 
 
-<script src="https://gist.github.com/vblanco20-1/db564c9cd57b86b0c49d2abce5a6fe81.js"></script>
 
-```cpp
 
-{
-    SCOPE_CYCLE_COUNTER(STAT_Boids);
+```cpp   
     //ask the ECS registry for how many spaceships there are
     int nShips = registry.raw<FSpaceship>().size();
 
@@ -159,20 +151,20 @@ Luckly, UE4 also has a job system, and there are a few interesting things on it.
         Projectile.ship = &proj;
         SpaceshipArray.Add(Projectile);
     });
+
     //Update the movmenet for each spaceship in parallel
     ParallelFor(SpaceshipArray.Num(), [&](int32 Index)
     {
         SpaceshipData data = SpaceshipArray[Index];
         const float shipCheckRadius = 1000;
+
         //grab nearby entities from the gridmap
         Foreach_EntitiesInRadius(shipCheckRadius, data.pos->pos, [&](GridItem item) {
 
             if (item.Faction == data.faction->faction)
             {
                 const FVector TestPosition = item.Position;
-
                 const float DistSquared = FVector::DistSquared(TestPosition, data.pos->pos);
-
                 const float AvoidanceDistance = shipCheckRadius * shipCheckRadius;
                 const float DistStrenght = FMath::Clamp(1.0 - (DistSquared / (AvoidanceDistance)), 0.1, 1.0) * dt;
                 const FVector AvoidanceDirection = data.pos->pos - TestPosition;
@@ -188,8 +180,6 @@ Luckly, UE4 also has a job system, and there are a few interesting things on it.
         data.vel->Add(ToTarget * 500 * dt);
         data.vel->vel = data.vel->vel.GetClampedToMaxSize(data.ship->MaxVelocity);
     });
-}
-
 ```
     
     
