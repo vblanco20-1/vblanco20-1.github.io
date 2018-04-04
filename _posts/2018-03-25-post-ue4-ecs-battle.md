@@ -2,8 +2,8 @@
 layout: post
 title: "Code: Experimenting with ECS in UE4"
 excerpt_separator: "<!--more-->"
-feature-img: "assets/img/screenshots/spacebattle.jpeg"
-thumbnail: "assets/img/screenshots/spacebattle.jpeg"
+feature-img: "assets/img/screenshots/spacebattle.jpg"
+thumbnail: "assets/img/screenshots/spacebattle.jpg"
 categories:
   - Code Experiment
 tags:
