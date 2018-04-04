@@ -34,6 +34,9 @@ The interesting part of it, is that it can be optimized, REALLY optimized. The c
 In general, entities are just a bag of components, and then in the systems you iterate through all the entities in the game that have certain sets of components to execute something.
 
 Example of a very basic "debug draw" system. This system will execute itself once every second, and draw all the entities that have a Position and a DebugSphere component.
+
+<script src="https://gist.github.com/vblanco20-1/940a57a1e4314de326eb120e3c5986ec.js"></script>
+
 ```cpp
 struct DebugDrawSystem :public System {
 
@@ -66,6 +69,8 @@ else
 ```
 
 This are the Components that are used in that system:
+
+<script src="https://gist.github.com/vblanco20-1/a37e57ea401fa3f69737bbd527dc2059.js"></script>
 
 ```cpp
 
@@ -132,6 +137,9 @@ To optimize it, i decided to multithread it.
 One of the most interesting things about ECS architecture, is that all the Systems are essentially "For All Entities with Components A and B, do logic". This makes them an easy candidate to parallelize. Unity does this, and they created their ECS architecture in a way that it integrates directly with their new Job system.
 
 Luckly, UE4 also has a job system, and there are a few interesting things on it. As most of the Systems are doing logic in their own world, separate from unreal, they are very good candidates to parallelize. For the homing behavior on the bullets, and for the separation behavior on the spaceships, i just used ParallelFor to execute it. First i "asked" the ECS library for all the entities with the components i wanted (Spaceship,Position,Velocity) for example. And then stored all of them into an array. Then i just execute the parallel for in that array. The tile map is read-only so its safe to read from multiple threads. Multithreading the boid simulation improved the calculation from 7 millseconds into less than 2. (Ryzen).
+
+
+<script src="https://gist.github.com/vblanco20-1/db564c9cd57b86b0c49d2abce5a6fe81.js"></script>
 
 ```cpp
 
