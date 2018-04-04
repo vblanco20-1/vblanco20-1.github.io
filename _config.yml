@@ -1,14 +1,14 @@
 # SITE CONFIGURATION
-baseurl: "/Type-on-Strap"
-url: "https://sylhare.github.io"
-title: Type on Strap # site's title
+#baseurl: "/Type-on-Strap"
+url: "http://victor.madtriangles.com/"
+title: Victors Blog # site's title
 description: "A website with blog posts and pages" # used by search engines
 
 
 # THEME-SPECIFIC CONFIGURATION
 theme_settings:
   # Meta
-  title: Type on Strap # blog's title
+  title: Victor's Blog # blog's title
   avatar: assets/img/triangle.svg
   favicon: assets/favicon.ico
   gravatar: # Email MD5 hash
