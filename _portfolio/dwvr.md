@@ -1,7 +1,7 @@
 ---
 layout: post
 title: DWVR
-feature-img: "assets/img/portfolio/dwvr-big.png"
+feature-img: "assets/img/portfolio/dwvr-big.jpg"
 img: "assets/img/portfolio/dwvr.png"
 date: 27 September 2015
 tags: [Game, VR, Consoles]
