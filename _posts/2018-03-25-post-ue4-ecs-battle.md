@@ -15,6 +15,8 @@ tags:
 
 Inspired by the new Unity ECS system, i decided to try those same techniques with UE4 and C++ instead of Unity and C# . For my experiment, i used the library EnTT ([URL]https://github.com/skypjack/entt[/URL]) to drive the ECS.
 
+<!--more-->
+
 **Entity-System-Component architecture**
 Entities: Just an ID/pointer. Holds Components
 Components: Just some data.
@@ -86,14 +88,14 @@ In something like this, "Ticking" entities and their components is so fast its p
 
 The projectiles and explosions are 100% "pure ECS", and thats why i can spawn and destroy so many without a hitch. They arent seen by unreal engine, they arent an Uobject, and they do not use dynamic memory. They are stored inside the ECS library in contiguous arrays. They are created from an Archetype blueprint. The Archetype is just an AInfo with a lot of "ECS wrapper" components. When i want to spawn a new bullet, i check if there is an archetype for that class, and spawn one. Then from that archetype i spawned i just copy new bullets (or explosions) over and over again. Given that pure ECS entities are just a ID and a bunch of very small components stored in some array somwhere, spawning and destroying bullets is super fast. There is no need to pool anything here.
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/Kl074xA"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<blockquote class="imgur-embed-pub" lang="en" data-id="Kl074xA"><a href="//imgur.com/Kl074xA"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 
 The spaceships, on the other hand, are hybrid Actor-ECS. They are actual actors with blueprints, and they have collision. For them, i have created a normal ActorComponent that "links" the normal UE4 actor with its ECS representation. The whole spaceship logic is done on the ECS world, and the Actor blueprint does not have ticking enabled. When a frame starts, the ECS system copies the transform of the Actor into a component, does all the logic, and then copies the transform back into normal unreal engine Actor (using SetActorTransform). This spaceship actors have an "OnKilled" event (wich gets called from the ECS) wich respawns the spaceship.
 
 **Performance**
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/o8fr811"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<blockquote class="imgur-embed-pub" lang="en" data-id="o8fr811"><a href="//imgur.com/o8fr811"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 This whole simulation takes less than 9ms to update on the CPU per frame when used in the editor. If its on a "Release" build of the game, it takes 5 milliseconds.
 
@@ -101,7 +103,7 @@ The performance of this is quite impressive, but right now, most of the cpu time
 
 
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="U9fTFIZ"><a href="//imgur.com/klhF1m6"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<blockquote class="imgur-embed-pub" lang="en" data-id="klhF1m6"><a href="//imgur.com/klhF1m6"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 **Boid Simulation**
 
