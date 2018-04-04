@@ -20,6 +20,9 @@ Inspired by the new Unity ECS system, i decided to try those same techniques wit
 <!--more-->
 
 **Entity-System-Component architecture**
+========================================
+
+
 Entities: Just an ID/pointer. Holds Components
 Components: Just some data.
 Systems: Executes the game code by iterating through entities that have some specific components.
@@ -95,7 +98,12 @@ The projectiles and explosions are 100% "pure ECS", and thats why i can spawn an
 
 The spaceships, on the other hand, are hybrid Actor-ECS. They are actual actors with blueprints, and they have collision. For them, i have created a normal ActorComponent that "links" the normal UE4 actor with its ECS representation. The whole spaceship logic is done on the ECS world, and the Actor blueprint does not have ticking enabled. When a frame starts, the ECS system copies the transform of the Actor into a component, does all the logic, and then copies the transform back into normal unreal engine Actor (using SetActorTransform). This spaceship actors have an "OnKilled" event (wich gets called from the ECS) wich respawns the spaceship.
 
+
+
+
+
 **Performance**
+==============
 
 <blockquote class="imgur-embed-pub" lang="en" data-id="o8fr811"><a href="//imgur.com/o8fr811"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
@@ -105,9 +113,14 @@ The performance of this is quite impressive, but right now, most of the cpu time
 
 
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="klhF1m6"><a href="//imgur.com/klhF1m6"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+
+
+
 
 **Boid Simulation**
+===================
+
+<blockquote class="imgur-embed-pub" lang="en" data-id="klhF1m6"><a href="//imgur.com/klhF1m6"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 
 The 3rd most costly thing in this project is the behavior for the bullets and the spaceships. The spaceships all have crowd separation, and the bullets have a range and move towards any enemy (other faction) that comes near. For this, i made an acceleration structure based on an sparse tile map. Essentially i have a TMap for TileLocation and TileData, and when the game updates, every entity that has a "GridMap" component gets sent into the data structure. One would think creating this data structure takes time, but it doesnt. I add the 400 spaceships into this structure every frame, and it takes 0.01 miliseconds.
@@ -175,6 +188,9 @@ Luckly, UE4 also has a job system, and there are a few interesting things on it.
 
 
 **Benefits**
+============
+
+
 C++ architecture is very simplified. You only need to deal with the specific Systems for each thing. This makes mantainability extremelly easy, and you can follow the logic of the whole game with easy.
 This system is *extremelly fast* . This is orders of magnitude faster than normal unreal engine components and actors. This can let you increase the amount of objects in the world without issue.
 The components are very modular. The fact that they dont have logic by themselves means you can attach any component to anything. Components shouldnt be as big as the components you create for normal ue4, but small composable modules that create behavior. For example i can put a "Linear Movement" component on anything. If that anything also has a Velocity and a Position component it now moves in a straight line. If i want to make it have gravity, i give it a Gravity component.
@@ -182,6 +198,9 @@ Its easy to parallelize and optimize "after the fact". As all the logic is self-
 
 
 **Downsides**
+=============
+
+
 As explained, the biggest issue is the interaction with actual unreal engine code, wich is not designed for this kind of "mass updating". With some engine tweaks this system could be twice as fast or more.
 Another issue is the fact that this is a C++ thing. While you can interface events, how do you interface events of a bullet when that bullet isnt even a "thing" for unreal engine. On the Hybrid actors such as the spaceships, its easy to give the wrapper components a event dispatcher or delegate to fire. But the hybrid actors are much more costly performance wise due to the "copy back and forth" from the Actor into the Entity, and then back again. It is still a net gain if you have actors that love to tick, as "ticking" ECS things is the default, and its pretty much free in performance.
 Last, this is a pure C++ system, so it does not support replication. Luckily, this is also extremelly easy to write networked code for if needed.
