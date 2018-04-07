@@ -37,3 +37,7 @@ I really liked this prototype, and playtesters also loved it. It did not become 
  VRMultigames biggest downside is how ugly it is, given that i made it alone in barely a few weeks. Most of its art is just default unreal engine assets. The lightsaber, pistol, drones, and bow were made by me.
  I used this project to analyze what players liked to play, and what kind of gameplay do they prefer. For this release, i added a considerable amount of analytics, to see what games were the most played. more than 40.000 players tried this game, and the most succesful prototype was the Last Stand minigame, wich eventually became DWVR. 
  If this had actual art, and a month or 2 of polish, it could have been sold as a real product. 
+
+Credits:
+Marketplace - Environment Assets and characters.
+Victor Blanco - All code, Pistol, Bow, Shield, Lightsword, Drone 3d models. 
