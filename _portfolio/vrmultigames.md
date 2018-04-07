@@ -11,18 +11,24 @@ VRMultigames game project, Released for free on [Oculus](https://www.oculus.com/
 
 Created 1 month after i got an HTC Vive, its a pack of 4 prototypes i coded, one week for each.
 
-Minigames:
- **Drone Assault game** . Where you fight a lot of flying enemies with your pistol and a lightsaber. The game lets the enemies fly close enough to you that you can strike them with the lightsaber. Bullet boucing is done with some physical formulas. If you strike the lightsaber at a bullet, this explodes.
+## Minigames:
 
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=DR8XMIi4EUo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
- **goalkeeper**. You have huge hands on sticks, and defend against 3 football cannons that fire in increased rates. The hard part of this game is the fact that the cannons are placed in a way that they are just outside of FOV, so you need to be aware of the 3d sound for each, and react fast enough.
+ **Drone Assault game** [Video](https://www.youtube.com/watch?v=DR8XMIi4EUo). Where you fight a lot of flying enemies with your pistol and a lightsaber. The game lets the enemies fly close enough to you that you can strike them with the lightsaber. Bullet boucing is done with some physical formulas. If you strike the lightsaber at a bullet, this explodes.
 
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=w9FysrPC84s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
- **Last Stand** Player has a bow, and has teleport movement. He needs to survive against increasing waves of enemies. This was a precursor to DWVR, wich took the same movement style and some gameplay cues. 
+ **Goalkeeper**. [Video](https://www.youtube.com/watch?v=w9FysrPC84s) You have huge hands on sticks, and defend against 3 football cannons that fire in increased rates. The hard part of this game is the fact that the cannons are placed in a way that they are just outside of FOV, so you need to be aware of the 3d sound for each, and react fast enough.
+
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=psdtP4Svj5Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+ **Last Stand** [Video](https://www.youtube.com/watch?v=psdtP4Svj5Q)Player has a bow, and has teleport movement. He needs to survive against increasing waves of enemies. This was a precursor to DWVR, wich took the same movement style and some gameplay cues. 
  In this game, there are 4 different types of enemies (sword enemy, sword and shield enemy, gun enemy, and flying drone). The sword and the shield enemies just run to the player and try to strike melee. The gun enemy just has very minor AI to try to not expose itself too much, and to attack at a range. The drones are flying around the map and shoot the player from a distance. The bow mechanics are very polished, and there is a gimmick where you can both block melee attacks and bullets with your bow. You can also use the bow like a staff and hit enemies directly with it. 
 
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=Q9YlJaEX69A" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-**Shootout** The most polished prototype. This one was not part of the initial pack of prototypes, and thus it has a different launch option in steam. This is a prototype for a time crysis style game for VR. In here, the player goes from cover point to cover point, advancing through the level. The enemies are very simple ranged combatants wich take cover and try to fire at the player. This minigame has gameplay mechanics that were later used in Robo Recall and Artika 1, more than a year before those games happened. For the gun reloading, the player has to throw the guns, and grab new ones from either the environment (stealing weapons from enemies) or from their infinite supply of respawning weapons in the waist. This prototype tried to see how telekinesis powers would work, and there is a lot of physical interaction with the level. You can use the telekinesis to steal enemies weapons, or grab objects and throw them. The map has lots of explosive barrels you can grab and shoot.
+**Shootout** [Video](https://www.youtube.com/watch?v=Q9YlJaEX69A) The most polished prototype. This one was not part of the initial pack of prototypes, and thus it has a different launch option in steam. This is a prototype for a time crysis style game for VR. In here, the player goes from cover point to cover point, advancing through the level. The enemies are very simple ranged combatants wich take cover and try to fire at the player. This minigame has gameplay mechanics that were later used in Robo Recall and Artika 1, more than a year before those games happened. For the gun reloading, the player has to throw the guns, and grab new ones from either the environment (stealing weapons from enemies) or from their infinite supply of respawning weapons in the waist. This prototype tried to see how telekinesis powers would work, and there is a lot of physical interaction with the level. You can use the telekinesis to steal enemies weapons, or grab objects and throw them. The map has lots of explosive barrels you can grab and shoot.
 I really liked this prototype, and playtesters also loved it. It did not become a full project squarely due to budget.
 
 
