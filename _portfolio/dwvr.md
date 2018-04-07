@@ -15,18 +15,17 @@ After releasing VRMultigames, I heard of Playstation Spain running the PS Awards
 
 I only had 2 weeks to apply to the awards, so i decided to take my favourite VRMultigames prototype (Last Stand), and merge it with the assets of Deathwave. This is the prototype i had 4 days after i decided to do it.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/vgZWyoVuwOg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="700" height="315" src="https://www.youtube.com/embed/vgZWyoVuwOg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-Prototype Video
 
 
 I used this prototype and a design document i improvised on the spot to apply for the Playstation Awards. It worked and i became a semi-finalist. Sadly, i did not reach the finalist stage. One week after i dropped from the contest, i released the game on early access, as i had it prepared. From first prototype to early access release it took 3 months. I released the game on both Steam and Oculus, but i missed the Oculus Touch launch sale by 1 week, wich was an absolute shame. The game made around 8000 dollars on this PC release.
 
 After the PC release, i became a PS4 developer (thanks to the contacts i got from the contest), and used the money i earned for PC to port the game to PSVR. Given the performance charasteristics of the PS4, i had to eventually rewrite most of the game. After rewriting the enemy code to use less collisions to avoid physics costs, and pooling everything that could be pooled, and made sure the graphics of the game are LITERALLY ZERO dynamic lights in the whole game, i ported the game to PSVR. This took around 2-3 months. The rest of the time until release was spent growing the game and adding more features. To profile and benchmark the game, i created a few automated "Chaos monkey" AIs, wich essentially are very simple bots attached to the same player controls. It simulates the player jumping around randomly around the map, and shooting at everything close by. I left this ones running in a loop for hours, and then see the performance logs and if it crashed.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/nI0Wr-4Grc0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="700" height="315" src="https://www.youtube.com/embed/nI0Wr-4Grc0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
- Video of the chaos  AI.
+
 
 The reception of the game on PSVR was positive, but there were some hideous day 1 bugs, wich i had to scramble to patch. These bugs were all caused by my lacking QA process, as i had to debug everything myself. While the chaos AIs made sure that the game doesnt crash and actually runs at a proper performance, there were other more subtle bugs that i completely missed.
 
