@@ -15,7 +15,7 @@ Created 1 month after i got an HTC Vive, its a pack of 4 prototypes i coded, one
 
 <img src="https://steamcdn-a.akamaihd.net/steam/apps/500360/ss_02d45aef0eafa0e5e95321230a80f54a307a26d3.1920x1080.jpg" alt="Drone Assault Pic" height="315" width="700">
 
- **Drone Assault game** [Video](https://www.youtube.com/watch?v=DR8XMIi4EUo).  Where you fight a lot of flying enemies with your pistol and a lightsaber. The game lets the enemies fly close enough to you that you can strike them with the lightsaber. Bullet boucing is done with some physical formulas. If you strike the lightsaber at a bullet, this explodes.
+ **Drone Assault game** [Video](https://www.youtube.com/watch?v=DR8XMIi4EUo).  In this prototype you fight a lot of flying enemies with your pistol and a lightsaber. The game lets the enemies fly close enough to you that you can strike them with the lightsaber. Bullet boucing is done with some physical formulas. If you strike the lightsaber at a bullet, this explodes. You can also destroy bullets by shooting them with the gun. It is designed so you can move around to dodge most bullets, but there are a bullet type that homes on the player, so the player has to block it somehow.
 
 <img src="https://steamcdn-a.akamaihd.net/steam/apps/500360/ss_d0f97af8fdef388d32df4e75f846e41566ca879e.1920x1080.jpg" alt="Goalkeeper Pic" height="315" width="700">
 
