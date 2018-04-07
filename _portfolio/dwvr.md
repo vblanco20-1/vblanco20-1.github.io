@@ -25,8 +25,13 @@ https://www.youtube.com/watch?v=nI0Wr-4Grc0 Video of the chaos  AI.
 
 The reception of the game on PSVR was positive, but there were some hideous day 1 bugs, wich i had to scramble to patch. These bugs were all caused by my lacking QA process, as i had to debug everything myself. While the chaos AIs made sure that the game doesnt crash and actually runs at a proper performance, there were other more subtle bugs that i completely missed.
 
-Credits: 
+**Credits**: 
+
 Lydia Diaz - Character models, non firearm weapon models.
+
 Victor Blanco - All code, All game design, Animation, FX
+
 Freelancers - Sound effects, Environment design
+
 Marketplace - Some animations, FX (heavily modified for the game), Environment assets, firearm assets. 
+
