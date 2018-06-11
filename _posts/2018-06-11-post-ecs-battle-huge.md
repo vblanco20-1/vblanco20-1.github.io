@@ -123,6 +123,9 @@ Every level is fully calculated before starting the next, and the transform matr
 
 Once every transform of every object is calculated, its time to render them
 
+
+![ECS Simulation battle]({{ site.baseurl }}/assets/img/screenshots/hugebattle2.jpg)
+
 **Rendering System**
 ========================================
 Everything up to this point has been API agnostic, but I chose DirectX for the rendering API. The reason is that I dont have as much experience with directx as with opengl, so I wanted to learn more.
