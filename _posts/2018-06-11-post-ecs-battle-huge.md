@@ -14,7 +14,7 @@ tags:
   - DirectX
 ---
 
-
+![ECS Simulation battle]({{ site.baseurl }}assets/img/screenshots/hugebattle.jpg)
 
 
 After getting bottlenecked by UE4 on the last ECS battle simulation, i wanted to create one on direct C++, without a game engine other than my own.
