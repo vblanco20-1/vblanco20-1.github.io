@@ -26,6 +26,10 @@ The render engine uses DirectX instanced rendering, to render humongous amounts 
 
 <!--more-->
 
+Performance of the simulation (recorded with Remotery )
+![ECS Simulation battle]({{ site.baseurl }}/assets/img/screenshots/battleperformance.PNG)
+
+
 **Parallelism**
 ========================================
 
