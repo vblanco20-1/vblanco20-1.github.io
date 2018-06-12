@@ -26,9 +26,8 @@ The render engine uses DirectX instanced rendering, to render humongous amounts 
 
 <!--more-->
 
-Performance of the simulation (recorded with Remotery )
-![ECS Simulation battle]({{ site.baseurl }}/assets/img/screenshots/battleperformance.PNG)
-
+**Performance of the simulation (recorded with Remotery )**
+![ECS Simulation battle]({{ site.baseurl }}/assets/img/screenshots/PerformanceDetail.PNG)
 
 **Parallelism**
 ========================================
@@ -55,6 +54,11 @@ std::for_each(std::execution::par,Boidview.begin(), Boidview.end(), [&](const au
 	AddToGridmap(t.position, boid);			
 });
 ```
+
+**Parallel Sections**
+
+![ECS Simulation battle]({{ site.baseurl }}/assets/img/screenshots/battleperformance.PNG)
+
 
 **Boid Avoidance**
 ========================================
