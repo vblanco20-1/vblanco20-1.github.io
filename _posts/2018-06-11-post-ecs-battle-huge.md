@@ -72,11 +72,11 @@ At first, I tried the same way the unreal engine ECS uses, wich is creating a ha
     HashMap< GridCoordinates, Vector< Boid > >;
 ```
 This worked great in the unreal engine version, becouse the unreal engine only writes to the ECS the spaceships (around 1000 on the higher end), and does it sequentially. Then the bullets read from it very fast to perform their heat-seeking behavior. 
-As in the new simulation I dont have heat seeking missiles, but only spaceships (and 30.000 of them), this did not scale. Inserting 30.000 entities into a hash map takes time, and its not very friendly to parallelism. For that reason I looked at alternatives, like using better hashmap implementations than std::unordered_map, but while those were twice faster than unordered_map, it still was not enough.
+As in the new simulation I dont have heat seeking missiles, but only spaceships (and 40.000 of them), this did not scale. Inserting 40.000 entities into a hash map takes time, and its not very friendly to parallelism. For that reason I looked at alternatives, like using better hashmap implementations than std::unordered_map, but while those were twice faster than unordered_map, it still was not enough.
 
 Then I turned into the idea of sorting the grid somehow, and using a binary search on it. My research got me to morton codes (Z-order curve) wich is a way to map a 2d coordinate into a 1d line, and that way is done in a way that it preserves locality very well. I used an implementation of a 3d version of the algorithm for this, wich allowed me to almost fully parallelize the "insertion", and then the reads can be parallel too.
 
-The current algorithm first reserves an array of the same size as all the boids in the world. Then it does a parallel_for over every boid in the world to calculate the morton code of its "grid" and insert the BoidData needed into the array. Once the array is filled with every entity in the world, I use std::sort(parallel) to do a parallel sort over it. Being parallel, sorting such a huge amount of units doesnt really cost that much, and I sort them by their morton code.
+The current algorithm first reserves an array of the same size as all the boids in the world. Then it does a parallel_for over every boid in the world to calculate the morton code of its "grid" and insert the BoidData needed into the array (atomically, unsorted). Once the array is filled with every entity in the world, I use std::sort(parallel) to do a parallel sort over it. Being parallel, sorting such a huge amount of units doesnt really cost that much, and I sort them by their morton code.
 
 ```cpp
 //parallel sort all entities by morton code
@@ -110,7 +110,7 @@ struct TileData{
 This allows me to accelerate the binary search, as I can do the search on this second array, and once ive found the TileData of the exact Tile I want to unpack, I have the range of the main array. 
 Generation of the TileData array is singlethreaded, becouse it relies on a linear "packing" of the boid data.
 
-Typical sizes are around 1000 TileData array vs 30.000-40.000 BoidData array.
+Typical sizes are around 1000 TileData array vs 40.000 BoidData array.
 
 
 To find the nearby boids to a location, first I calculate the tiles that would fall inside the search radius, and then I try to find each Tile morton code in the TileData array (through binary search). Once that is found, I iterate over the range that the TileData gives me.
@@ -124,7 +124,7 @@ To do that, I decided to look at the way the paper "Pitfalls of Object Oriented 
 Instead of having an actual "scenegraph", I have a tree of transforms. But the interesting part is that the transforms are stored in contiguous arrays by tree depth.
 I have one array for each hierarchy level, and each of those arrays hold a transform matrix + a "parent" index (16 bit becouse its enough ). 
 
-To calculate the transforms of up to 240.000 objects every frame, I first start by building the model matrix out of the position, rotation, and scale components. To do that, I perform a parallel for that iterates over the data of every entity, and stores the calculated matrix into the correct scene tree position. This ones are all "relative" to the parent.
+To calculate the transforms of up to 130.000 objects every frame, I first start by building the model matrix out of the position, rotation, and scale components. To do that, I perform a parallel for that iterates over the data of every entity, and stores the calculated matrix into the correct scene tree position. This ones are all "relative" to the parent.
 
 Once all the transforms are calculated, I need to calculate the actual parent/child relationship, to get the final "world" matrix for rendering. To do that, I do a parallel for over every level of the scene tree IN ORDER, starting by the nodes at level 1 (as the level 0 nodes do not have a parent so they dont need further calculation), and ending when everything is calculated.
 Every level is fully calculated before starting the next, and the transform matrices are calculated by their "in-memory" order, as they are stored in contiguous arrays. This makes it super cache friendly, and 100% multithreaded with linear scaling.
