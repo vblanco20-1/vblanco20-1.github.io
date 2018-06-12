@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Heavy Gear Assault
-feature-img: "assets/img/portfolio/cake.png"
-img: "assets/img/portfolio/cake.png"
+feature-img: "assets/img/portfolio/heavygear.jpg"
+img: "assets/img/portfolio/heavygear.jpg"
 date: 27 September 2015
 tags: [UE4, PC, Portfolio]
 ---
