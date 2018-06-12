@@ -20,7 +20,7 @@ tags:
 After getting bottlenecked by UE4 on the last ECS battle simulation [Link](http://victor.madtriangles.com/code%20experiment/2018/03/25/post-ue4-ecs-battle.html)   , I wanted to create one on direct C++, without a game engine other than my own.
 The new simulation 100.000 entities at 60 fps on my Ryzen machine. It is designed in a way that it almost scales linearly with cores. 
 
-The simulation is very similar to the UE4 version, it runs around 30.000 "spaceships", all of them with a separation kernel to move in the opposite direction of their peers. This part takes most of the CPU time.
+The simulation is very similar to the UE4 version, it runs around 40.000 "spaceships", all of them with a separation kernel to move in the opposite direction of their peers. This part takes most of the CPU time.
 
 The render engine uses DirectX instanced rendering, to render humongous amounts of colored cubes, all of them with a different transform. Transforms are recalculated every frame.
 
