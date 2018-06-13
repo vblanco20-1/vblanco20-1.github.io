@@ -107,9 +107,9 @@ Now I could already do a binary search over this, but this array is still "too b
 ```cpp
 
 struct TileData{
-    uint64_t morton;
-    size_t start_idx;
-    size_t end_idx;
+    uint32_t morton;
+    uint16_t start_idx;
+    uint16_t end_idx;
 }
 
 ```
