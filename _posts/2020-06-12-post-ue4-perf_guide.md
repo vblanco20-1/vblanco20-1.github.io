@@ -2,8 +2,8 @@
 layout: post
 title: "Guide to UE4 performance"
 excerpt_separator: "<!--more-->"
-feature-img: "assets/img/screenshots/spacebattle.jpg"
-thumbnail: "assets/img/screenshots/spacebattle.jpg"
+feature-img: "assets/img/screenshots/InsightsHeader.png"
+thumbnail: "assets/img/screenshots/InsightsHeader.png"
 categories:
   - Code Experiment
 tags:
