@@ -19,6 +19,8 @@ Over and over i have seen people making the same mistakes when developing games 
 
 This guide will be useful for unity developers too, as a lot of them are very similar in both engines. Its focused around CPU and code performance, not GPU.
 
+<!--more-->
+
 ### _1: Know your profiler_
 The most important thing when optimizing anything is to be able to measure what you are doing. Using profiling tools is necessary if you want to check what is slow and what is fast, and know where to focus your efforts. Unreal engine has multiple of them, the latest of which is Unreal Insights. https://www.youtube.com/watch?v=TygjPe9XHTw
 
