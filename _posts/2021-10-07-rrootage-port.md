@@ -2,8 +2,8 @@
 layout: post
 title: "Remastering rRootage for Nintendo Switch"
 excerpt_separator: "<!--more-->"
-feature-img: "assets/img/screenshots/rrootage.jpeg"
-thumbnail: "assets/img/screenshots/rrootage.jpeg"
+feature-img: "assets/img/screenshots/rrootage.jpg"
+thumbnail: "assets/img/screenshots/rrootage.jpg"
 categories:
   - Code Experiment
 tags:
